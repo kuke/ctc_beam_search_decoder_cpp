@@ -17,7 +17,7 @@ Scorer::~Scorer(){
    delete (Model *)this->_language_model;
 }
 
-inline void strip(std::string str, char ch=' ') {
+inline void strip(std::string &str, char ch=' ') {
     if (str.size() == 0) return;
     int start  = 0;
     int end = str.size()-1;
@@ -67,13 +67,13 @@ float Scorer::language_model_score(std::string sentence) {
     for (util::TokenIter<util::SingleCharacter, true> it(sentence, ' '); it; ++it){
         lm::WordIndex vocab = model->GetVocabulary().Index(*it);
         ret = model->FullScore(state, vocab, out_state);
-        score += ret.prob;
         std::cout<<ret.prob<<"\n";
         state = out_state;
-        ret = model->FullScore(state, model->GetVocabulary().EndSentence(), out_state);
-        score += ret.prob; 
     }
-    return score;
+    //ret = model->FullScore(state, model->GetVocabulary().EndSentence(), out_state);
+    score = ret.prob; 
+    
+    return  pow(10, score);
 }
 
 float Scorer::get_score(std::string sentence) {
