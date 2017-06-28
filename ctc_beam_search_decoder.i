@@ -1,6 +1,5 @@
 %module ctc_beam_search_decoder
 %{
-#include "scorer.h"
 #include "ctc_beam_search_decoder.h"
 %}
 
@@ -19,4 +18,5 @@ namespace std{
     %template(PairDoubleStringVector) std::vector<std::pair<double, std::string> >;
 }
 
+%import scorer.h
 %include "ctc_beam_search_decoder.h"

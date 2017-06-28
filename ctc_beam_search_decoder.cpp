@@ -92,9 +92,9 @@ std::vector<std::pair<double, std::string> >
                         probs_nb_cur[l_plus] += prob_c * probs_b_prev[l];
                         probs_nb_cur[l] += prob_c * probs_nb_prev[l];
                     } else if (new_char == " ") {
-                        if (ext_scorer != NULL) {
+                        //if (ext_scorer != NULL) {
                           //  std::cout<<"scoring out "<<ext_scorer->evaluate("123")<<std::endl;
-                        }
+                        //}
                         probs_nb_cur[l_plus] += prob_c * (
                             probs_b_prev[l] + probs_nb_prev[l]);
                     } else {
@@ -128,8 +128,9 @@ std::vector<std::pair<double, std::string> >
     std::sort(beam_result.begin(), beam_result.end(), pair_comp_first_rev<double, std::string>);
     return beam_result;
 }
-/*
+
 int main()
 {
    std::cout<<"tst!";
-}*/
+   return 0;
+}

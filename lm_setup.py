@@ -54,7 +54,7 @@ setup(
 )
 
 ctc_beam_search_decoder_module = Extension('_ctc_beam_search_decoder',
-                           sources=FILES+['ctc_beam_search_decoder_wrap.cxx', 'ctc_beam_search_decoder.cpp','scorer.cpp'],
+                           sources=FILES+['ctc_beam_search_decoder_wrap.cxx', 'ctc_beam_search_decoder.cpp', 'scorer_wrap.cxx','scorer.cpp'],
                            language='C++', 
                            include_dirs=['.'],
                            libraries=LIBS, 
