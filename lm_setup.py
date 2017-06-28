@@ -52,3 +52,21 @@ setup(
     ext_modules=ext_modules,
     include_package_data=True,
 )
+
+ctc_beam_search_decoder_module = Extension('_ctc_beam_search_decoder',
+                           sources=FILES+['ctc_beam_search_decoder_wrap.cxx', 'ctc_beam_search_decoder.cpp','scorer.cpp'],
+                           language='C++', 
+                           include_dirs=['.'],
+                           libraries=LIBS, 
+                           extra_compile_args=ARGS
+                          )
+
+system('swig -python -c++ ./ctc_beam_search_decoder.i')
+setup(name='ctc_beam_search_decoder',
+      version='0.1',
+      author='Yibing Liu',
+      description="""CTC beam search decoder""",
+      ext_modules=[ctc_beam_search_decoder_module],
+      py_modules=['ctc_beam_search_decoder'],
+      )
+

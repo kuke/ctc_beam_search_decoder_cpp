@@ -128,8 +128,8 @@ std::vector<std::pair<double, std::string> >
     std::sort(beam_result.begin(), beam_result.end(), pair_comp_first_rev<double, std::string>);
     return beam_result;
 }
-
+/*
 int main()
 {
    std::cout<<"tst!";
-}
+}*/

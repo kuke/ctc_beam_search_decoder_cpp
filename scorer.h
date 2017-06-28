@@ -1,3 +1,6 @@
+#ifndef SCORER_H_
+#define SCORER_H_
+
 #include <string>
 
 
@@ -15,3 +18,5 @@ public:
     float language_model_score(std::string);
     float get_score(std::string);
 };
+
+#endif

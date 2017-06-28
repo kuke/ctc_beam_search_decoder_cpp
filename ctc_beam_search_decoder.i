@@ -19,5 +19,4 @@ namespace std{
     %template(PairDoubleStringVector) std::vector<std::pair<double, std::string> >;
 }
 
-%include "scorer.h"
 %include "ctc_beam_search_decoder.h"
