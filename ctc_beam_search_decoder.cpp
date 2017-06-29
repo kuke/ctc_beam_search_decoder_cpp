@@ -39,7 +39,9 @@ std::vector<std::pair<double, std::string> >
     }
     
     // initialize
+    // two sets containing selected and candidate prefixes respectively
     std::map<std::string, double> prefix_set_prev, prefix_set_next;
+    // probability of prefixes ending with blank and non-blank
     std::map<std::string, double> probs_b_prev, probs_nb_prev;
     std::map<std::string, double> probs_b_cur, probs_nb_cur;
     prefix_set_prev["\t"] = 1.0;
@@ -56,7 +58,7 @@ std::vector<std::pair<double, std::string> >
         for (int i=0; i<prob.size(); i++) {
             prob_idx.push_back(std::pair<int, double>(i, prob[i]));
         }
-
+        // pruning of vacobulary
         if (cutoff_prob < 1.0) {
             std::sort(prob_idx.begin(), prob_idx.end(), pair_comp_second_rev<int, double>);
             float cum_prob = 0.0;
@@ -68,23 +70,24 @@ std::vector<std::pair<double, std::string> >
             }
             prob_idx = std::vector<std::pair<int, double> >(prob_idx.begin(), prob_idx.begin()+cutoff_len);
         }
-
+        // extend prefix 
         for (std::map<std::string, double>::iterator it = prefix_set_prev.begin(); 
             it != prefix_set_prev.end(); it++) {
             std::string l = it->first;
             if( prefix_set_next.find(l) == prefix_set_next.end()) {
                 probs_b_cur[l] = probs_nb_cur[l] = 0.0;
             }
+
             for (int index=0; index<prob_idx.size(); index++) {
                 int c = prob_idx[index].first;
                 double prob_c = prob_idx[index].second;
                 if (c == blank_id) {
                     probs_b_cur[l] += prob_c*(probs_b_prev[l]+probs_nb_prev[l]);
-                }
-                else {
+                } else {
                     std::string last_char = l.substr(l.size()-1, 1);
                     std::string new_char = vocabulary[c];
                     std::string l_plus = l+new_char;
+
                     if( prefix_set_next.find(l_plus) == prefix_set_next.end()) {
                         probs_b_cur[l_plus] = probs_nb_cur[l_plus] = 0.0;
                     }
@@ -105,6 +108,7 @@ std::vector<std::pair<double, std::string> >
                     prefix_set_next[l_plus] = probs_nb_cur[l_plus]+probs_b_cur[l_plus];
                 }
             }
+
             prefix_set_next[l] = probs_b_cur[l]+probs_nb_cur[l];  
         }
 
@@ -117,21 +121,23 @@ std::vector<std::pair<double, std::string> >
         prefix_set_prev = std::map<std::string, double>
                   (prefix_vec_next.begin(), prefix_vec_next.begin()+k);
     }
- 
+
+    // post processing
     std::vector<std::pair<double, std::string> > beam_result;
     for (std::map<std::string, double>::iterator it = prefix_set_prev.begin(); 
          it != prefix_set_prev.end(); it++) {
-        if (it->second > 0.0) {
+        if (it->second > 0.0 && it->first.size() > 1) {
+            double prob = it->second;
+            std::string sentence = it->first.substr(1);
+            // scoring the last word
+            if (ext_scorer != NULL && sentence[sentence.size()-1] != ' ') {
+                prob = prob * ext_scorer->get_score(sentence);
+            }
             double log_prob = log(it->second);
             beam_result.push_back(std::pair<double, std::string>(log_prob, it->first));
         }
     }
+    // sort the result and return
     std::sort(beam_result.begin(), beam_result.end(), pair_comp_first_rev<double, std::string>);
     return beam_result;
-}
-
-int main()
-{
-   std::cout<<"tst!";
-   return 0;
 }

@@ -1,4 +1,4 @@
-%module ctc_beam_search_decoder
+%module swig_ctc_beam_search_decoder
 %{
 #include "ctc_beam_search_decoder.h"
 %}

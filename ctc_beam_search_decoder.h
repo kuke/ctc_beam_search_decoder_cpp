@@ -6,14 +6,6 @@
 #include <utility>
 #include "scorer.h"
 
-/*std::vector<std::pair<float, std::string>> ctc_beam_search_decoder(
-                                           std::vector<std::vector<float>> probs_seq,
-                                           int beam_size,
-                                           std::vector<char> vocabulary,
-                                           int blank_id = 0,                                   
-                                          )
-*/
-//std::vector<std::pair<float, std::string> > ctc_beam_search_decoder(std::vector<float> probs_seq);
 std::vector<std::pair<double, std::string> > 
            ctc_beam_search_decoder(std::vector<std::vector<double> > probs_seq,
                                    int beam_size,

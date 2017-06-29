@@ -1,4 +1,4 @@
-%module scorer
+%module swig_scorer
 %{
 #include "scorer.h"
 %}

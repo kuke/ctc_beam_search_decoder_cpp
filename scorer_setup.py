@@ -33,12 +33,10 @@ if compile_test('lzma.h', 'lzma'):
     ARGS.append('-DHAVE_XZLIB')
     LIBS.append('lzma')
 
-print("before system")
-
 system('swig -python -c++ ./scorer.i')
 
 ext_modules = [
-    Extension(name='_scorer',
+    Extension(name='_swig_scorer',
         sources=FILES + ['scorer_wrap.cxx','scorer.cpp'],
         language='C++', 
         include_dirs=['.'],
@@ -47,11 +45,11 @@ ext_modules = [
 ]
 
 setup(
-    name='scorer',
+    name='swig_scorer',
     version='0.1',
     ext_modules=ext_modules,
     include_package_data=True,
-    py_modules=['scorer'],
+    py_modules=['swig_scorer'],
 )
 
 

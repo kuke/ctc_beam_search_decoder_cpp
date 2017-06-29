@@ -80,11 +80,3 @@ double Scorer::get_score(std::string sentence) {
     double final_score = pow(lm_score, _alpha) * pow(word_cnt, _beta);
     return final_score;
 }
-/*
-int main()
-{
-    Scorer ext_scorer(1.0, 1.0, "/Users/liuyibing01/Projects/paddle_work/models/deep_speech_2/data/1Billion.klm");
-    std::cout<< ext_scorer.word_count("ha ha ha")<<std::endl;
-    std::cout<< ext_scorer.language_model_score("I am fine")<<std::endl;
-    return 0;
-}*/
