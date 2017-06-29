@@ -49,7 +49,7 @@ int Scorer::word_count(std::string sentence) {
     strip(sentence);
     int cnt = 0;
     for (int i=0; i<sentence.size(); i++) {
-        if (sentence[i] == ' ') {
+        if (sentence[i] == ' ' && sentence[i-1] != ' ') {
             cnt ++;
         }
     }
@@ -57,30 +57,27 @@ int Scorer::word_count(std::string sentence) {
     return cnt;
 }
 
-float Scorer::language_model_score(std::string sentence) {
+double Scorer::language_model_score(std::string sentence) {
     Model *model = (Model *)this->_language_model;
     State state, out_state;
     lm::FullScoreReturn ret;
-    float score = 0.0;
     state = model->BeginSentenceState();
 
     for (util::TokenIter<util::SingleCharacter, true> it(sentence, ' '); it; ++it){
         lm::WordIndex vocab = model->GetVocabulary().Index(*it);
         ret = model->FullScore(state, vocab, out_state);
-        std::cout<<ret.prob<<"\n";
         state = out_state;
     }
-    //ret = model->FullScore(state, model->GetVocabulary().EndSentence(), out_state);
-    score = ret.prob; 
+    double score = ret.prob; 
     
     return  pow(10, score);
 }
 
-float Scorer::get_score(std::string sentence) {
+double Scorer::get_score(std::string sentence) {
+    double lm_score = language_model_score(sentence);
     int word_cnt = word_count(sentence);
-    float lm_score = language_model_score(sentence);
 
-    float final_score = pow(lm_score, _alpha) * pow(word_cnt, _beta);
+    double final_score = pow(lm_score, _alpha) * pow(word_cnt, _beta);
     return final_score;
 }
 /*

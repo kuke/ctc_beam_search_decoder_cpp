@@ -92,10 +92,11 @@ std::vector<std::pair<double, std::string> >
                         probs_nb_cur[l_plus] += prob_c * probs_b_prev[l];
                         probs_nb_cur[l] += prob_c * probs_nb_prev[l];
                     } else if (new_char == " ") {
-                        //if (ext_scorer != NULL) {
-                          //  std::cout<<"scoring out "<<ext_scorer->evaluate("123")<<std::endl;
-                        //}
-                        probs_nb_cur[l_plus] += prob_c * (
+                        double score = 1.0;
+                        if (ext_scorer != NULL && l.size() > 1) {
+                            score = ext_scorer->get_score(l.substr(1));
+                        }
+                        probs_nb_cur[l_plus] += score * prob_c * (
                             probs_b_prev[l] + probs_nb_prev[l]);
                     } else {
                         probs_nb_cur[l_plus] += prob_c * (

@@ -15,8 +15,8 @@ public:
     Scorer(float alpha, float beta, std::string lm_model_path);
     ~Scorer();
     int word_count(std::string);
-    float language_model_score(std::string);
-    float get_score(std::string);
+    double language_model_score(std::string);
+    double get_score(std::string);
 };
 
 #endif
